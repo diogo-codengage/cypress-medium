@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class App extends Component {
+  state = { searching: false, dog: null }
+
+  click = async () => {
+    this.setState({ searching: true })
+    axios
+      .get('https://dog.ceo/api/breeds/image/random')
+      .then(res => res.data)
+      .then(dog => this.setState({ dog }))
+      .then(() => this.setState({ searching: false }))
+  }
+
   render() {
+    const { dog } = this.state
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <button data-test="button" onClick={this.click}>CLICK</button>
+        <img data-test="img" src={dog ? dog.message: ''} />
       </div>
     );
   }
